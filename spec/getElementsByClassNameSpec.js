@@ -10,6 +10,35 @@ var htmlStrings = [
 
 describe('getElementsByClassName', function(){
 
+  // Define 'getElementsByClassName'
+  'use strict';
+
+  var getElementsByClassName = function(className) {
+      var output = [];
+      var recursiveClassFinder = function(elt) {
+          var hasClass = false;
+          var classes = elt.classList;
+          if (classes) {
+              for (var i = 0; i < classes.length; i++) {
+                  if (classes[i] === className) {
+                      hasClass = true;
+                  }
+              }
+          }
+          if (hasClass) {
+              output.push(elt);
+          }
+          var kids = elt.children;
+          if (kids && kids.length) {
+              for(var j = 0; j < kids.length; j++) {
+                  recursiveClassFinder(kids[j]);
+              }
+          }
+      };
+      recursiveClassFinder(document.body);
+      return output;
+  };
+
   it('should match the results of calling the built-in function', function(){
     $('body').addClass('targetClassName');
     htmlStrings.forEach(function(htmlString){
